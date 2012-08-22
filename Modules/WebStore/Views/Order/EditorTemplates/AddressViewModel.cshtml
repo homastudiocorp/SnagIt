@@ -1,0 +1,92 @@
+﻿@model WebStore.Models.Order.AddressViewModel
+<fieldset>
+    @{
+        SelectListItem defaultSelectListItem = default(SelectListItem);
+        List<SelectListItem> titles = new List<SelectListItem> 
+        {  
+            new SelectListItem{ Text = T("Mrs").Text, Value = Enum.GetName( typeof( WebStore.Models.Order.AddressViewModel.Titles),WebStore.Models.Order.AddressViewModel.Titles.Mrs)},
+            new SelectListItem{ Text = T("Miss").Text, Value = Enum.GetName( typeof( WebStore.Models.Order.AddressViewModel.Titles),WebStore.Models.Order.AddressViewModel.Titles.Miss)},
+            new SelectListItem{ Text = T("Mr").Text, Value = Enum.GetName( typeof( WebStore.Models.Order.AddressViewModel.Titles),WebStore.Models.Order.AddressViewModel.Titles.Mr)} 
+        };
+
+        IEnumerable<SelectListItem> countries = this.Model.AvailableCountries.Select(c => new SelectListItem { Text = c.DisplayName, Value = c.CountryId });
+        IEnumerable<SelectListItem> states = null;
+        IEnumerable<dynamic> availableStates = null;
+
+
+        if (this.Model.AvailableCountries.Any())
+        {
+            if (!String.IsNullOrEmpty(this.Model.Country) && this.Model.AvailableCountries.Any(c => c.CountryId == this.Model.Country))
+            {
+                availableStates = this.Model.AvailableCountries.First(c => c.CountryId == this.Model.Country).States;
+            }
+            else
+            {
+                availableStates = this.Model.AvailableCountries.First().States;
+            }
+        }
+
+        states = availableStates.Select(s => new SelectListItem { Text = s.DisplayName, Value = s.StateId });
+
+        if (this.Model.Title.HasValue)
+        {
+            String strTitle = Enum.GetName(typeof(WebStore.Models.Order.AddressViewModel.Titles), this.Model.Title.Value);
+            SelectListItem titleItem = titles.FirstOrDefault(sli => sli.Value == strTitle);
+            if (titleItem != defaultSelectListItem)
+            {
+                titleItem.Selected = true;
+            }
+        }
+        if (!String.IsNullOrEmpty(this.Model.Country))
+        {
+            SelectListItem countryItem = countries.FirstOrDefault(sli => sli.Value == this.Model.Country);
+            if (countryItem != defaultSelectListItem)
+            {
+                countryItem.Selected = true;
+            }
+        }
+    }
+    <ul>
+        <li>@Html.HiddenFor(m => m.AddressId)
+            @Html.HiddenFor(m => m.AddressType)
+            @Html.LabelFor(m => m.Title, T("Civility :"))
+            @Html.DropDownListFor(m => m.Title, titles)</li>
+        <li>@Html.LabelFor(m => m.FirstName, T("First name :"))
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.LastName, T("Last name :"))
+            @Html.TextBoxFor(m => m.LastName, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.Company, T("Company :"))
+            @Html.TextBoxFor(m => m.Company, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.AddressLine1, T("Address line 1 :"))
+            @Html.TextBoxFor(m => m.AddressLine1, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.AddressLine2, T("Address line 2 :"))
+            @Html.TextBoxFor(m => m.AddressLine2, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.AddressLine3, T("Address line 3 :"))
+            @Html.TextBoxFor(m => m.AddressLine3, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.Floor, T("Floor :"))
+            @Html.TextBoxFor(m => m.Floor, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.DigiCode, T("DigiCode :"))
+            @Html.TextBoxFor(m => m.DigiCode, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.ZipCode, T("Zip/Post code :"))
+            @Html.TextBoxFor(m => m.ZipCode, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.City, T("City :"))
+            @Html.TextBoxFor(m => m.City, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.Country, T("Country :"))
+            @Html.DropDownListFor(m => m.Country, countries)</li>
+        <li>@Html.LabelFor(m => m.State, T("State :"))
+            @Html.DropDownListFor(m => m.State, states)</li>
+        <li>@Html.LabelFor(m => m.PhoneNumber, T("Phone number :"))
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "textMedium" })</li>
+        <li>@Html.LabelFor(m => m.CellPhoneNumber, T("Cell phone number :"))
+            @Html.TextBoxFor(m => m.CellPhoneNumber, new { @class = "textMedium" })</li>
+        @{
+            if (this.Model.AddressType == WebStore.Models.Order.AddressViewModel.AddressTypes.Billing)
+            {
+            <text>
+            <li>@Html.LabelFor(m => m.ShippingAddressIsDifferent, T("Shipping address is different :"))
+                @Html.CheckBoxFor(m => m.ShippingAddressIsDifferent)</li>
+            </text>
+            }
+        }
+    </ul>
+</fieldset>

@@ -1,0 +1,7 @@
+﻿@using (Html.BeginForm("Add", "Basket", new { area = "WebStore" }, FormMethod.Post))
+{
+    @Html.AntiForgeryTokenOrchard()
+    <input type="hidden" name="ProductId" value="@this.Model.Product.ProductId" />
+    <input type="hidden" name="CatalogId" value="@this.Model.Product.CatalogId" />
+    <input type="submit" value="@T("Add to basket")" />
+}

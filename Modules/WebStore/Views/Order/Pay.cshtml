@@ -1,0 +1,25 @@
+﻿@model WebStore.Models.Order.PayViewModel
+@using (Html.BeginForm("ProceedToCheckout", "Basket", new { area = "WebStore" }, FormMethod.Post))
+{
+    <h3>@T("Order Summary")</h3>
+    <p>@T("SubTotal") : @Math.Round(this.Model.SubTotal, 2) @this.Model.Currency</p>
+    <p>@T("Shipping Cost") : @Math.Round(this.Model.ShippingCost, 2) @this.Model.Currency</p>
+    <p>@T("Total") : @Math.Round(this.Model.Total, 2) @this.Model.Currency</p>
+
+    <h3>@T("Payment")</h3>
+    @Html.AntiForgeryTokenOrchard();
+    <input type="image" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif" alt="@T("PayPal - The safer, easier way to pay online")" /> 
+}
+<ul class="buttons">
+    <li>
+        <button type="button" id="btnBack">@T("Back")</button></li>
+</ul>
+<script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(
+        function () {
+            $('#btnBack').click(OrderPanel.shippingMethods)
+        }
+    );
+    //]]>
+</script>

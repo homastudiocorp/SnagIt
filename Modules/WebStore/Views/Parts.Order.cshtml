@@ -1,0 +1,69 @@
+﻿@{
+    this.Script.Require("jQuery");    
+}
+@using (this.Script.Foot())
+{ 
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        var OrderPanel = {
+            update: function (result) {
+                $('div.ws-op').html(result);
+            },
+
+            submitForm: function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var form = $(this).closest('form');
+                var data = new Object();
+                $(form.serializeArray()).each(function () { if (!data[this.name]) { data[this.name] = this.value; } });
+                $.post(form.attr('action'), data, OrderPanel.update);
+            },
+
+            start: function () {
+                $.get('@Url.Action("OrderPanel", new { area = "WebStore", controller = "Order" })', OrderPanel.update);
+            },
+
+            startClassic: function () {
+                $.get('@Url.Action("Address", new { area = "WebStore", controller = "Order", express = false })', OrderPanel.update);
+            },
+
+            startExpress: function () {
+                $.get('@Url.Action("Address", new { area = "WebStore", controller = "Order", express = true })', OrderPanel.update);
+            },
+
+            shippingMethods: function () {
+                $.get('@Url.Action("ShippingMethods", new { area = "WebStore", controller = "Order" })', OrderPanel.update);
+            },
+
+            lastEditedAddress: function () {
+                $.get('@Url.Action("LastAddress", new { area = "WebStore", controller = "Order" })', OrderPanel.update);
+            },
+
+            loadStates: function () {
+                var ddlStates = $('#State');
+                ddlStates.children().remove();
+                $.ajax(
+                    {
+                        url: '@Url.Action("GetStates", new { area = "WebStore", controller = "Order", express = true })',
+                        type: 'get',
+                        dataType: 'json',
+                        data: { CountryId: $(this).val() },
+                        success: function (states) {
+                            $(states).each(function () { $('<option/>').html(this.DisplayName).attr({ value: this.StateId }).appendTo(ddlStates); });
+                        }
+                    }
+                );
+            }
+        };
+        $(document).ready(
+            function () {
+                $('div.ws-op :submit').live('click', OrderPanel.submitForm);
+                $('#Country').live('change', OrderPanel.loadStates);
+                OrderPanel.start();
+            }
+        );
+    //]]>
+    </script>
+}
+<div class="ws-op">
+</div>

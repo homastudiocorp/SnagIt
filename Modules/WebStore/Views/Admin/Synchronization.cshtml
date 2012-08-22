@@ -1,0 +1,20 @@
+﻿@model WebStore.Models.Admin.SynchronizationViewModel
+@{
+    this.Style.Require("jQueryUtils_TimePicker");               
+}
+<h2>@T("WebStore")</h2>
+<h3>@T("Synchronization")</h3>
+<div>
+    @T("Last synchronization :")
+    @if (this.Model.LastSynchronizationDate.HasValue)
+    { 
+        @Model.LastSynchronizationDate.Value
+    }
+    else
+    {
+        @T("never")
+    }
+</div>
+<div>
+    @Html.ActionLink(T("Synchronize").Text, "Synchronize", "Admin", new { area = "WebStore" })
+</div>

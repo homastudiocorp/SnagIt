@@ -1,0 +1,13 @@
+Name: WebStore
+AntiForgery: enabled
+Author: Magelia
+Website: http://mageliawebstore.codeplex.com
+Version: 1.0.2
+OrchardVersion: 1.0
+Description: WebStore e-commerce module adds e-commerce features to Orchard (categories, products, basket). Module documentation available at http://mageliawebstore.codeplex.com/documentation. A running and configured instance of Magelia WebStore is required.
+Features:
+    WebStore:
+		Name : WebStore e-commerce
+		Description: Add e-commerce features to Orchard.
+        Dependencies: Settings, Routable, Orchard.jQuery
+        Category: Commerce

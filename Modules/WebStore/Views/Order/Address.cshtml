@@ -1,0 +1,45 @@
+﻿@model WebStore.Models.Order.AddressViewModel
+@using (this.Html.BeginForm(new { area = "WebStore", controller = "Order", action = "Address" }))
+{ 
+    <h3>
+        @T(this.Model.AddressType == WebStore.Models.Order.AddressViewModel.AddressTypes.Billing ? "Billing address" : "Shipping address")
+    </h3>
+    @Html.AntiForgeryTokenOrchard()
+    @Html.ValidationSummary(false, this.T("Addres form contains error(s) :").Text)
+    @Html.EditorForModel()
+    <fieldset>
+        <ol class="buttons">
+            <li>
+                <button type="button" id="btnBack">@T("Back")</button></li>
+            <li>
+                <button type="submit">@T("Next")</button></li>
+        </ol>
+    </fieldset>
+    <script type="text/javascript" language="javascript">
+        //<!CDATA[
+        $(document).ready(
+        function () {
+            $('#btnBack').click(
+                @{
+                                 if (this.Model.AddressType == WebStore.Models.Order.AddressViewModel.AddressTypes.Billing)
+                                 {
+                    <text> OrderPanel.start
+                    </text>
+                                 }
+                                 else if (this.User.Identity.IsAuthenticated)
+                                 {
+                    <text> OrderPanel.startClassic
+                    </text>
+                                 }
+                                 else
+                                 {
+                    <text> OrderPanel.startExpress
+                    </text>
+                                 }
+                }
+            );
+        }
+    );
+        //]]>
+    </script>
+}

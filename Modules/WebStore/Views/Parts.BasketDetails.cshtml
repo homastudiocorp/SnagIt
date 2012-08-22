@@ -1,0 +1,87 @@
+﻿@{
+    if (this.Model.Products.Count == 0)
+    {
+    <p>@T("Your basket is empty")</p>
+    }
+    else
+    {
+    <table border="0" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>
+                    @T("Product name")
+                </th>
+                <th>
+                    @T("Price")
+                </th>
+                <th>
+                    @T("Quantity")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in this.Model.Products)
+            {
+                <tr>
+                    <td>
+                        @p.ProductName
+                    </td>
+                    <td>
+                        @String.Concat(
+                        Math.Round(p.UnitPrice,2),
+                        this.Model.Currency)
+                    </td>
+                    <td>
+                        @if (p.LineItemIsDiscount)
+                        {
+                            @p.Quantity.ToString("0")
+                        }
+                        else
+                        {
+                            using (Html.BeginForm("Update", "Basket", new { area = "WebStore", productId = p.ProductId, catalogId = p.CatalogId }, FormMethod.Post))
+                            {
+                            @Html.AntiForgeryTokenOrchard()
+                            <text>
+                            <input type="text" name="quantity" value="@p.Quantity.ToString("0")" />
+                            <input type="submit" value="@T("Update")" />
+                            </text>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (!p.LineItemIsDiscount)
+                        {
+                            using (Html.BeginForm("Remove", "Basket", new { area = "WebStore", productId = p.ProductId, catalogId = p.CatalogId }, FormMethod.Post))
+                            {
+                            @Html.AntiForgeryTokenOrchard()
+                            <text>
+                            <input type="submit" value="@T("Remove")" />
+                            </text>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table border="0">
+        <tr>
+            <td>
+                @T("Subtotal (incl. Sales tax)")
+            </td>
+            <td>
+                @Model.SubTotal.ToString(".00") @Model.Currency
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @T("Total (incl. Shipping and taxes)")
+            </td>
+            <td>
+                @Model.Total.ToString(".00") @Model.Currency
+            </td>
+        </tr>
+    </table>
+    <a href="@Href("~/WebStore/Order")">@T("Order")</a>
+    }
+}

@@ -1,0 +1,11 @@
+﻿<Placement>
+  <Place Parts_WebStore_Configuration="Content:10"/>
+  <Place Parts_Product="Content:10.1"/>  
+  <Place Parts_ProductEdit="Content:10.1"/>
+  <Place Parts_ProductPrice="Content:10.1"/>
+  <Place Parts_ProductAddToBasket="Content:10.1"/>
+  <Place Parts_Category="Content:10.1"/>
+  <Place Parts_Basket="Content:1.1" />
+  <Place Parts_BasketDetails="Content:10.1" />
+  <Place Parts_Order="Content:10.2" />
+</Placement>

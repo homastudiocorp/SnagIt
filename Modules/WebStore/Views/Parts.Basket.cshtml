@@ -1,0 +1,45 @@
+﻿@{
+    this.Script.Require("jQuery");   
+}
+@using (this.Script.Foot())
+{
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(
+            function () {
+                $('select.ws-country').change(
+                    function () {
+                        $.post('@Url.Action("SetContextCountry", new { area = "WebStore", controller = "Basket" })', { countryId: $(this).val() }, function () { document.reload(); })
+                    }
+                );
+            }
+        );
+        //]]>
+    </script>
+}
+<p>
+    @T("Shipping country :")
+    @if (Model.Countries.Length>0)
+    {
+        <select class="ws-country">
+            @foreach (dynamic country in this.Model.Countries)
+            {
+                <option @{ if (country.CountryId == (String)Model.Country)
+                           {<text>selected="selected"</text>} } value="@country.CountryId">@country.DisplayName</option>
+                
+                
+            }
+        </select>
+    }
+    @{
+        if (this.Model.Quantity == 0)
+        {
+        @T("Your basket is empty")
+        }
+        else
+        {
+        <text> <a href="@Href("~/WebStore/BasketDetails")">@T("Basket") (@this.Model.Quantity)</a>
+        </text>
+        }
+    }
+</p>

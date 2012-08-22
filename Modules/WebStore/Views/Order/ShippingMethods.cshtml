@@ -1,0 +1,74 @@
+﻿@model WebStore.Models.Order.ShippingMethodsViewModel
+@using (this.Html.BeginForm(new
+{
+    area = "WebStore",
+    controller = "Order",
+    action = "ShippingMethods"
+}))
+{
+    @Html.AntiForgeryTokenOrchard()
+if (this.Model.AvailableShippingMethods.Any())
+{
+   
+    @Html.ValidationSummary(false, @T("Form contains error(s):").Text)
+    <table>
+        <thead>
+            <tr>
+                <th>@T("Shipping mode")
+                </th>
+                <th>@T("Price (Incl Tax)")
+                </th>
+                <th>@T("Selection")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (dynamic shippingMethod in this.Model.AvailableShippingMethods)
+            {
+                <tr>
+                    <td>
+                        @shippingMethod.CarrierName
+                    </td>
+                    <td>
+                        @Math.Round(shippingMethod.Price, 2) @this.Model.Currency
+                    </td>
+                    <td>
+                        @Html.RadioButtonFor(m => m.ShippingMethod, (Guid)shippingMethod.ShippingMethodId, new { @class = "shippingMethod" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <fieldset>
+        <ol class="buttons">
+            <li>
+                <button type="button" id="btnBack">@T("Back")</button>
+            </li>
+            <li>
+                <button type="submit">@T("Next")</button>
+            </li>
+        </ol>
+    </fieldset>
+}
+
+else
+{
+    <p>
+        @T("No shipping methods")
+        <button id="btnBack" type="button">@T("Back")</button>
+    </p>
+}
+}
+<script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(
+        function () {
+            $('#btnBack').click(OrderPanel.lastEditedAddress);
+            var shippingMethods = $('input[type=radio].shippingMethod');
+            if (shippingMethods.filter(':checked').length == 0) {
+                shippingMethods.first().attr({ checked: 'checked' });
+            }
+        }
+    );
+    //]]>
+</script>

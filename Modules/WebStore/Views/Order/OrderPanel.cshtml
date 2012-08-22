@@ -1,0 +1,33 @@
+﻿@model WebStore.Models.Order.OrderPanelViewModel
+<div class="ws-op-part">
+
+    @if (this.Model.HasBasket)
+    {
+        <h3>
+            @T("Authentication")
+        </h3>
+        <div class="content">
+            @{
+                <text>
+                <p>
+                    @Html.ActionLink(this.T("Sign in").Text, "LogOn", new { area = "Orchard.Users", controller = "Account", returnUrl = this.Model.ReturnUrl })
+                    @T("to order with your usual account or proceed to an") <a href="#" class="ws-express">@T("express order")</a>
+                    <script language="javascript" type="text/javascript">
+                        //<!CDATA[[
+                        $(document).ready(
+                            function () {
+                                $('a.ws-express').click(OrderPanel.startExpress);
+                            }
+                        );
+                        //]]>
+                    </script>
+                </p>
+                </text> 
+            }
+        </div>
+    }
+    else
+    { 
+        <p>@T("Your basket is empty")</p>
+    }
+</div>
